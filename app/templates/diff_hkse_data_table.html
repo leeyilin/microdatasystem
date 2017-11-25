@@ -1,0 +1,60 @@
+{% extends 'basic_layout.html' %}
+{% block selfstyle%}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <br><br><br><br>
+  <script type="text/javascript" src="{{ url_for('static', filename='validate_form.js') }}"></script>
+  <form class="form-inline" action="{{ url_for('diff_hkse_data') }}" method="POST" id="query_data">
+    {% include 'ip_list.html' %}
+    <div class="form-group">
+      <label for="market_name">Market:&#160</label>
+      <select class="form-control" id="market_name", name="market_name">
+        <option value="HK">HK</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Request Data</button>
+  </form>
+
+  <h2 id="h2_content"></h2>
+  <script type="text/javascript" charset="UTF-8">
+    function initElement() {
+      document.getElementById('market_name').value = "{{ selected_market_name|safe }}";
+      document.getElementById('ip_list').value = "{{ selected_ip|safe }}";
+      document.getElementById('port').value = "{{ selected_port|safe }}";
+      document.getElementById('h2_content').innerHTML = "{{ table_cell_format|safe }}"
+    }
+
+    initElement();
+  </script>
+  <br>
+  <div>
+    Data Source: <a href="#">Hong Kong Stock Exchange</a>
+  </div>
+  
+  <div class="data_table">
+    <table id="diff_hkse_data_table" class="display" cellspacing="0" width="100%"></table>
+  </div>
+  <script type="text/javascript" charset='utf-8'>
+    var all_hkse_datas = {{ all_hkse_datas|safe }};
+    $(document).ready(function() {
+      var diff_hkse_data_table = $('#diff_hkse_data_table').DataTable( {
+        "lengthMenu": [ [10, 100, 500, -1], [10, 100, 500, "All"] ],
+        data: all_hkse_datas,
+        columns: [
+          { title: "Stock Code", data: "stock_code", className: "dt-left"},
+          { title: "Highest Price", data: "highest_price", className: "dt-left"},
+          { title: "Lowest Price", data: "lowest_price", className: "dt-left"},
+          { title: "Newest Price", data: "newest_price", className: "dt-left"},
+          { title: "Volume", data: "volume", className: "dt-left"},
+          { title: "Amount", data: "amount", className: "dt-left"},
+        ],
+        "order": [[1, 'des']]
+      } );
+    } );
+  </script>
+
+</div>
+{% endblock %}

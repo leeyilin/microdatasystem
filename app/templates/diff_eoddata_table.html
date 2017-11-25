@@ -1,0 +1,260 @@
+{% extends 'basic_layout.html' %}
+{% block selfstyle %}
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"
+          charset="utf-8"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <br><br><br><br>
+    <script type="text/javascript" src="{{ url_for('static', filename='validate_form.js') }}"></script>
+    <form role="form" class="form-inline" action="{{ url_for('diff_eoddata') }}" method="POST" id="query_data">
+      {% include 'ip_list.html' %}
+      <div class="form-group">
+        <label for="market_name">Market:&#160</label>
+        <select class="form-control" id="market_name", name="market_name">
+          <option value="NASDAQ">NASDAQ</option>
+          <option value="AMEX">AMEX</option>
+          <option value="NYSE">NYSE</option>
+        </select>
+      </div>
+      <div class='form-group'>
+        <label for="query_date">Date:&#160</label>
+        <input type="date" id="query_web_date" name="query_date">
+        <button type="submit" class="btn btn-danger">Request Data</button>
+      </div>
+    </form>
+
+    <div>
+      <h2>Data Source: <a href="http://www.eoddata.com/">Eoddata Website</a></h2>
+    </div>
+    <br><br>
+
+    <div class="table-responsive" style="display: inline-block">
+      <table class="table" style="width: 40%">
+        <caption style="font-weight: 500; font-size: larger; color: #000000; font-family: Garuda">
+          Diff Result Summary</caption>
+        <thead>
+          <tr style="background-color: #aaaaaa">
+            <th>Field Name</th>
+            <th>EMoney</th>
+            <th>Eod</th>
+            <th>Common</th>
+            <th>Sum</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background-color: #ff6384">
+            <td>Trade Sequence</td>
+            <td>{{ diff_result_summary.eastmoney_exclusively.trade_sequence }}</td>
+            <td>{{ diff_result_summary.eod_exclusively.trade_sequence }}</td>
+            <td>{{ diff_result_summary.common_stock.trade_sequence }}</td>
+            <td>{{ diff_result_summary.sum.trade_sequence }}</td></tr>
+          <tr style="background-color: #36a2eb">
+            <td>Open Price</td>
+            <td>{{ diff_result_summary.eastmoney_exclusively.open_price }}</td>
+            <td>{{ diff_result_summary.eod_exclusively.open_price }}</td>
+            <td>{{ diff_result_summary.common_stock.open_price }}</td>
+            <td>{{ diff_result_summary.sum.open_price }}</td></tr>
+          <tr style="background-color: #ffce56">
+            <td>Highest Price</td>
+            <td>{{ diff_result_summary.eastmoney_exclusively.highest_price }}</td>
+            <td>{{ diff_result_summary.eod_exclusively.highest_price }}</td>
+            <td>{{ diff_result_summary.common_stock.highest_price }}</td>
+            <td>{{ diff_result_summary.sum.highest_price }}</td></tr>
+          <tr style="background-color: #4bc0c0">
+            <td>Lowest Price</td>
+            <td>{{ diff_result_summary.eastmoney_exclusively.lowest_price }}</td>
+            <td>{{ diff_result_summary.eod_exclusively.lowest_price }}</td>
+            <td>{{ diff_result_summary.common_stock.lowest_price }}</td>
+            <td>{{ diff_result_summary.sum.lowest_price }}</td></tr>
+          <tr style="background-color: #9966ff">
+            <td>Newest Price</td>
+            <td>{{ diff_result_summary.eastmoney_exclusively.newest_price }}</td>
+            <td>{{ diff_result_summary.eod_exclusively.newest_price }}</td>
+            <td>{{ diff_result_summary.common_stock.newest_price }}</td>
+            <td>{{ diff_result_summary.sum.newest_price }}</td></tr>
+          <tr style="background-color: #00fdff">
+            <td>Close Price</td>
+            <td>{{ diff_result_summary.eastmoney_exclusively.close_price }}</td>
+            <td>{{ diff_result_summary.eod_exclusively.close_price }}</td>
+            <td>{{ diff_result_summary.common_stock.close_price }}</td>
+            <td>{{ diff_result_summary.sum.close_price }}</td></tr>
+          <tr style="background-color: #ff9f40">
+            <td>Volume</td>
+            <td>{{ diff_result_summary.eastmoney_exclusively.volume }}</td>
+            <td>{{ diff_result_summary.eod_exclusively.volume }}</td>
+            <td>{{ diff_result_summary.common_stock.volume }}</td>
+            <td>{{ diff_result_summary.sum.volume }}</td></tr>
+        </tbody>
+      </table>
+      {# End table #}
+    </div>
+  {# End table responsive #}
+
+    <div id="canvas-holder" style="width: 50%; display: inline-block; padding-left: 8%">
+      <canvas id="chart-area"/>
+    </div>
+    {# End of column #}
+    <script type="text/javascript" charset="UTF-8">
+      var config = {
+        type: "pie",
+        data: {
+          datasets: [{
+            data: [
+              {{ diff_result_summary.common_stock.trade_sequence }},
+              {{ diff_result_summary.common_stock.open_price }},
+              {{ diff_result_summary.common_stock.highest_price }},
+              {{ diff_result_summary.common_stock.lowest_price }},
+              {{ diff_result_summary.common_stock.newest_price }},
+              {{ diff_result_summary.common_stock.close_price }},
+              {{ diff_result_summary.common_stock.volume }},
+            ],
+            backgroundColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(0, 253, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+            ],
+            label: "Diff Result Summary"
+          }],
+          labels: [
+            "Trade Sequence",
+            "Open Price",
+            "Highest Price",
+            "Lowest Price",
+            "Newest Price",
+            "Close Price",
+            "Volume",
+          ]
+        },
+        options: {
+          responsive: true,
+          padding: {
+            left: 500,
+            right: 0,
+            top: 0,
+            bottom: 0
+          }
+        }
+      };
+      {# Onload means being called once. #}
+      window.onload = function () {
+        {# Create a pie. #}
+        var ctx = document.getElementById("chart-area").getContext("2d");
+        window.myPie = new Chart(ctx, config);
+        {# Show one table at the beginning. #}
+        var tableList = $("div.split_tables table");
+        tableList.each(function (index, tmpTable) {
+          if ($(this).attr('id') == 'common_stock_table') {
+            $(this).parent('div').show();
+          } else {
+            $(this).parent('div').hide();
+          }
+        });
+      };
+    </script>
+
+    <br><br><br>
+    <div class="btn-group btn-group-lg">
+      <button type="button" id="common_stock_btn" style="background-color: #57bfff">Common Stock Quotes</button>
+      <button type="button" id="eastmoney_exclusively_btn" style="background-color: #ff1a1e">Eastmoney Exclusively Quotes</button>
+      <button type="button" id="eod_exclusively_btn" style="background-color: #52ff18">Eod Exclusively Quotes</button>
+    </div>
+    <div>
+      <strong id="cell_format" style="color: #ff35e3"></strong>
+    </div>
+    <div class="split_tables">
+      <div class="data_table" id="common_stock_table_wrapper">
+        <table id="common_stock_table" class="display" cellspacing="0" width="100%"></table>
+      </div>
+      <div class="data_table" id="eastmoney_exclusively_table_wrapper">
+        <table id="eastmoney_exclusively_table" class="display" cellspacing="0" width="100%"></table>
+      </div>
+      <div class="data_table" id="eod_exclusively_table_wrapper">
+        <table id="eod_exclusively_table" class="display" cellspacing="0" width="100%"></table>
+      </div>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var common_stock_quotes = {{ split_result.common_stock|safe }};
+      var eastmoney_exclusively_quotes = {{ split_result.eastmoney_exclusively|safe }};
+      var eod_exclusively_quotes = {{ split_result.eod_exclusively|safe }};
+      {#  Why not create the tables at one time? #}
+      $(document).ready(function () {
+        var common_stock_table = $('#common_stock_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: common_stock_quotes,
+          columns: [
+            {title: "Stock Code", data: "stock_code", className: "dt-left"},
+            {title: "Trade Sequence", data: "trade_sequence", className: "dt-left"},
+            {title: "Open Price", data: "open_price", className: "dt-left"},
+            {title: "Highest Price", data: "highest_price", className: "dt-left"},
+            {title: "Lowest Price", data: "lowest_price", className: "dt-left"},
+            {title: "Newest Price", data: "newest_price", className: "dt-left"},
+            {title: "Close Price", data: "close_price", className: "dt-left"},
+            {title: "Volume", data: "volume", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+
+        var eastmoney_exclusively_table = $('#eastmoney_exclusively_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: eastmoney_exclusively_quotes,
+          columns: [
+            {title: "Stock Code", data: "stock_code", className: "dt-left"},
+            {title: "Trade Sequence", data: "trade_sequence", className: "dt-left"},
+            {title: "Open Price", data: "open_price", className: "dt-left"},
+            {title: "Highest Price", data: "highest_price", className: "dt-left"},
+            {title: "Lowest Price", data: "lowest_price", className: "dt-left"},
+            {title: "Newest Price", data: "newest_price", className: "dt-left"},
+            {title: "Close Price", data: "close_price", className: "dt-left"},
+            {title: "Volume", data: "volume", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+
+        var eod_exclusively_table = $('#eod_exclusively_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: eod_exclusively_quotes,
+          columns: [
+            {title: "Stock Code", data: "stock_code", className: "dt-left"},
+            {title: "Trade Sequence", data: "trade_sequence", className: "dt-left"},
+            {title: "Open Price", data: "open_price", className: "dt-left"},
+            {title: "Highest Price", data: "highest_price", className: "dt-left"},
+            {title: "Lowest Price", data: "lowest_price", className: "dt-left"},
+            {title: "Newest Price", data: "newest_price", className: "dt-left"},
+            {title: "Close Price", data: "close_price", className: "dt-left"},
+            {title: "Volume", data: "volume", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+
+        $('div.btn-group button').on('click', function () {
+          var tableID = $(this).attr('id').slice(0, -3) + 'table';
+          var tableList = $("div.split_tables table");
+          tableList.each(function (index, tmpTable) {
+            if ($(this).attr('id') == tableID) {
+              $(this).parent('div').show();
+            } else {
+              $(this).parent('div').hide();
+            }
+          });
+        });
+
+      });
+    </script>
+    <script type="text/javascript" charset="UTF-8">
+      function initElement() {
+        document.getElementById('market_name').value = "{{ selected_market_name|safe }}";
+        document.getElementById('ip_list').value = "{{ selected_ip|safe }}";
+        document.getElementById('port').value = "{{ selected_port|safe }}";
+        document.getElementById('cell_format').innerHTML = "{{ table_cell_format|safe }}";
+        document.getElementById('query_web_date').value = "{{ selected_date|safe }}";
+      }
+
+      initElement();
+    </script>
+  </div>{# End of container #}
+{% endblock %}

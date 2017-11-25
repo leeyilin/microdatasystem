@@ -1,0 +1,147 @@
+{% extends 'basic_layout.html' %}
+{% block selfstyle %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <br><br>
+    <div id="diff_result" style="color: #2464ff;">
+      <p></p>
+    </div>
+    <div class="table-responsive">
+      <table class="table" style="width: 30%" id="all_server_info">
+        <caption style="font-weight: 500; font-size: x-large; color: #ff0028; font-family: Garuda">
+          Server List for Reference</caption>
+        <thead>
+          <tr style="background-color: #ff22e4">
+            <th>Server Name</th>
+            <th>IP</th>
+            <th>Port</th></tr>
+        </thead>
+        <tbody>
+          {% for addr in all_server_info %}
+            <tr style="background-color: #ffd6fe">
+              <td>{{ addr.server_name }}</td>
+              <td>{{ addr.server_ip }}</td>
+              <td>{{ addr.port }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div name="notice" style="color: #6c68ff;">
+      <p>Notice: </p>
+      <p>IP address from the Computer Room of Zhoupu is not accessible
+        since the background server is in the same computer room.</p>
+      <div id="exception_description" style="color: #398e2f;">
+        <p></p>
+      </div>
+    </div>
+    <br><br>
+    <div class="controls">
+      <script type="text/javascript" src="{{ url_for('static', filename='validate_form.js') }}"></script>
+      <form role="form" class="form-inline" autocomplete="off" action="{{ url_for('diff_stock_data') }}" method="POST"
+            id="diff_stock_data">
+        {% include 'stock_form.html' %}
+        <div class="entry input-group col-xs-7">
+          <input type="text" class="form-control" name="server_ip[1]" id="server_ip[1]" placeholder="Input IP.."/>
+          <span class="input-group-addon">@Port</span>
+          <input class="form-control" name="port[1]" id="port[1]" type="text" value="1861"/>
+          <span class="input-group-btn">
+            <button class="btn btn-success btn-add" type="button">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='dynamic_form_field.js') }}"></script>
+    <script type="text/javascript" charset="UTF-8">
+      function initElement() {
+        document.getElementById('message_id').value = "{{ selected_message_id|safe }}";
+        document.getElementById('market_name').value = "{{ selected_market_name|safe }}";
+        document.getElementById('stock_id').value = "{{ selected_stock_id|safe }}";
+      }
+
+      initElement();
+    </script>
+    <br>
+    <div class="data_table">
+      <table id="diff_stock_data_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      function describeException(exceptionDescription) {
+        if (exceptionDescription != 'No exception') {
+          $('div#exception_description p').html(exceptionDescription);
+        } else {
+          $('div#exception_description p').html('');
+        }
+      };
+      function describeDiffResult(diffResult) {
+        if (diffResult != 0) {
+          $('div#diff_result p').html('Find out some different data...');
+        } else {
+          $('div#diff_result p').html('Oops! No different data is found...');
+        }
+      };
+
+      $(document).ready(function () {
+        var all_different_data = {{ all_different_data|safe }};
+        var diffStockDataTable = $('#diff_stock_data_table').DataTable({
+          "lengthMenu": [[100, 500, -1], [100, 500, "All"]],
+          data: all_different_data,
+          columns: [
+            { title: "Stock Code", data: "stock_code", className: "dt-left" },
+            { title: "Field Name", data: "field_name", className: "dt-left" },
+            { title: "Value", data: "value", className: "dt-left" },
+            { title: "Counter", data: "counter", className: "dt-left" },
+            { title: "IP List", data: "ip_list", className: "dt-left" },
+          ],
+          "order": [[1, 'des']]
+        });
+
+        $('form#diff_stock_data').submit(function (event) {
+          {# Stop submitting the form. #}
+          event.preventDefault();
+          var stockMessageIDs = [8101, 8103, 8104, 8105, 8112, 8113, 8115, 8117, 8118, 8119];
+          var tmpID = parseInt($('select#message_id').val());
+          if (stockMessageIDs.indexOf(tmpID) != -1) {
+            var tmpStockID = $('input#stock_id').val();
+            if (tmpStockID == '') {
+              // Make it warn in a more friendly way later.
+              alert('Stock ID is required!');
+              return false;
+            }
+          }
+          if ([8102, 8113].indexOf(tmpID) != -1) {
+            alert('Could not support comparison of data under this message ID right now.');
+            return false;
+          }
+          var url = $(this).attr('action');
+          var formData = $(this).serializeArray();
+          $('form#diff_stock_data button').attr('disabled', true);
+          $.post(url, formData).done(function (message) {
+            {# Remove the log in the near future. #}
+            console.log(message.myexception, message.diff_result, message.different_data.slice(0, 20));
+            diffStockDataTable.clear();
+            describeException(message.myexception);
+            describeDiffResult(message.diff_result);
+            var diffData = message.different_data;
+            for (var i = 0; i < diffData.length; ++i) {
+              diffStockDataTable.row.add({
+                stock_code: diffData[i].stock_code,
+                field_name: diffData[i].field_name,
+                value: diffData[i].value,
+                counter: diffData[i].counter,
+                ip_list: diffData[i].ip_list
+              });
+            }
+            diffStockDataTable.draw();
+            $('form#diff_stock_data button').attr('disabled', false);
+          });
+          return false;
+        });
+      });
+    </script>
+  </div>
+{% endblock %}

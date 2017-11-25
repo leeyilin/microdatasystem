@@ -1,0 +1,334 @@
+{% extends 'basic_layout.html' %}
+{% block selfstyle %}
+{% endblock %}
+{% block content %}
+  <div class="container-fluid">
+    <br><br><br><br>
+    <script type="text/javascript" src="{{ url_for('static', filename='validate_form.js') }}"></script>
+    <form class="form-inline" action="{{ url_for('basic_stock_data') }}" method="POST" id="basic_stock_data">
+      {% include 'ip_list.html' %}
+      {% include 'stock_form.html' %}
+    </form>
+    <h2 id="h2_content"></h2>
+    <script type="text/javascript" charset="UTF-8">
+      function initElement() {
+        document.getElementById('ip_list').value = "{{ selected_ip|safe }}";
+        document.getElementById('port').value = "{{ selected_port|safe }}";
+        document.getElementById('message_id').value = "{{ selected_message_id|safe }}";
+        document.getElementById('market_name').value = "{{ selected_market_name|safe }}";
+        document.getElementById('stock_id').value = "{{ selected_stock_id|safe }}";
+        document.getElementById('h2_content').innerHTML = "{{ selected_message_id|safe }}";
+      }
+
+      initElement();
+    </script>
+    <br>
+
+    <div class="data_table">
+      <table id="stock_data_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var dataSet = {{ stock_dicts|safe }};
+      $(document).ready(function () {
+        var stock_data_table = $('#stock_data_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: dataSet,
+          columns: [
+            {title: "Market Name", data: "market_name", className: "dt-left"},
+            {title: "Type", data: "type", className: "dt-left"},
+            {title: "Stock Name", data: "stock_name", className: "dt-left"},
+            {title: "Stock Code", data: "stock_code", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="rtmin_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var rtmins = {{ rtmins|safe }};
+      $(document).ready(function () {
+        var rtmin_table = $('#rtmin_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: rtmins,
+          columns: [
+            {title: "Trade Time", data: "trade_time", className: "dt-left"},
+            {title: "Close Price", data: "closed_price", className: "dt-left"},
+            {title: "Open Price", data: "open_price", className: "dt-left"},
+            {title: "Highest Price", data: "highest_price", className: "dt-left"},
+            {title: "Lowest Price", data: "lowest_price", className: "dt-left"},
+            {title: "Average Price", data: "average_price", className: "dt-left"},
+            {title: "Waipan", data: "waipan", className: "dt-left"},
+            {title: "Volume", data: "volume", className: "dt-left"},
+            {title: "Amount", data: "amount", className: "dt-left"},
+            {title: "Trade Number", data: "trade_number", className: "dt-left"},
+            {title: "Ext1 Volume", data: "ext1_volume", className: "dt-left"},
+            {title: "Ext2 Volume", data: "ext2_volume", className: "dt-left"},
+            {title: "Ext1 Price", data: "ext1_price", className: "dt-left"},
+            {title: "Ext2 Price", data: "ext2_price", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="blockqt_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var blockqts = {{ blockqts|safe }};
+      $(document).ready(function () {
+        var blockqt_table = $('#blockqt_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: blockqts,
+          columns: [
+            {title: "Stock Code", data: "stock_code", className: "dt-left"},
+            {title: "Market ID", data: "market_id", className: "dt-left"},
+            {title: "Trade Sequence", data: "trade_sequence", className: "dt-left"},
+            {title: "Close Price", data: "closed_price", className: "dt-left"},
+            {title: "Open Price", data: "open_price", className: "dt-left"},
+            {title: "Highest Price", data: "highest_price", className: "dt-left"},
+            {title: "Lowest Price", data: "lowest_price", className: "dt-left"},
+            {title: "Newest Price", data: "newest_price", className: "dt-left"},
+            {title: "Top Stock Code", data: "top_stock_code", className: "dt-left"},
+            {title: "Total Capital Stock", data: "total_capital_stock", className: "dt-left"},
+            {title: "Total Market Value", data: "total_market_value", className: "dt-left"},
+            {title: "Pe Ratio", data: "pe_ratio", className: "dt-left"},
+            {title: "Turnover 2days", data: "turnover_2days", className: "dt-left"},
+            {title: "Percent 3days", data: "percent_3days", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="block_overview_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var block_overviews = {{ block_overviews|safe }};
+      $(document).ready(function () {
+        var block_overview_table = $('#block_overview_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: block_overviews,
+          columns: [
+            {title: "Stock Code", data: "stock_code", className: "dt-left"},
+            {title: "Market ID", data: "market_id", className: "dt-left"},
+            {title: "Type", data: "type", className: "dt-left"},
+            {title: "Net Flow", data: "net_flow", className: "dt-left"},
+            {title: "Increase in Percent", data: "increase_in_percent", className: "dt-left"},
+            {title: "Increase in Days", data: "increase_in_days", className: "dt-left"},
+            {title: "Top Stock Code", data: "top_stock_code", className: "dt-left"},
+            {title: "Top Stock Market ID", data: "top_stock_market_id", className: "dt-left"},
+            {title: "Top Stock Increase in Percent", data: "top_stock_increase_in_percent", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="base_bq_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var base_bqs = {{ base_bqs|safe }};
+      $(document).ready(function () {
+        var base_bq_table = $('#base_bq_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: base_bqs,
+          columns: [
+            {title: "Buy Broker1 Tab", data: "buy_broker1_tab", className: "dt-left"},
+            {title: "Buy Broker1 Nos", data: "buy_broker1_nos", className: "dt-left"},
+            {title: "Sell Broker1 Tab", data: "sell_broker1_tab", className: "dt-left"},
+            {title: "Sell Broker1 Nos", data: "sell_broker1_nos", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="bq_trace_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var bq_traces = {{ bq_traces|safe }};
+      $(document).ready(function () {
+        var bq_trace_table = $('#bq_trace_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: bq_traces,
+          columns: [
+            {title: "Buy Broker1 Tab", data: "buy_broker1_tab", className: "dt-left"},
+            {title: "Buy: StockID Flag Price", data: "buy_stockID_flag_price", className: "dt-left"},
+            {title: "Sell Broker1 Tab", data: "sell_broker1_tab", className: "dt-left"},
+            {title: "Sell: StockID Flag Price", data: "sell_stockID_flag_price", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="mx_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var mxs = {{ mxs|safe }};
+      $(document).ready(function () {
+        var mx_table = $('#mx_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: mxs,
+          columns: [
+            {title: "Trade Date", data: "trade_date", className: "dt-left"},
+            {title: "Trade Time", data: "trade_time", className: "dt-left"},
+            {title: "Price", data: "price", className: "dt-left"},
+            {title: "Volume", data: "volume", className: "dt-left"},
+            {title: "Trade Number", data: "trade_number", className: "dt-left"},
+            {title: "Buyin Volume", data: "buyin_volume", className: "dt-left"},
+            {title: "Trade Type", data: "trade_type", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="qtex_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var qtexs = {{ qtexs|safe }};
+      $(document).ready(function () {
+        var qtex_table = $('#qtex_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: qtexs,
+          columns: [
+            {title: "Currency Code", data: "currency_code", className: "dt-left"},
+            {title: "Spread Table", data: "spread_table", className: "dt-left"},
+            {title: "Listing Date", data: "listing_date", className: "dt-left"},
+            {title: "Coupon Rate", data: "coupon_rate", className: "dt-left"},
+            {title: "Yield Value", data: "yield_value", className: "dt-left"},
+            {title: "Conversion Ratio", data: "conversion_ratio", className: "dt-left"},
+            {title: "Strike Price", data: "strike_price", className: "dt-left"},
+            {title: "Maturity Date", data: "maturity_date", className: "dt-left"},
+            {title: "Price to Refer", data: "price_to_refer", className: "dt-left"},
+            {title: "Volume to Refer", data: "volume_to_refer", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="cas_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var cass = {{ cass|safe }};
+      $(document).ready(function () {
+        var mx_table = $('#cas_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: cass,
+          columns: [
+            {title: "Order Inbalance Direction", data: "order_imbalance_direction", className: "dt-left"},
+            {title: "Order Imbalance Quantity", data: "order_imbalance_quantity", className: "dt-left"},
+            {title: "Price to Refer", data: "price_to_refer", className: "dt-left"},
+            {title: "Lower Limit Price", data: "lower_limit_of_price_to_refer", className: "dt-left"},
+            {title: "Upper Limit Price", data: "upper_limit_of_price_to_refer", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="vcm_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var vcms = {{ vcms|safe }};
+      $(document).ready(function () {
+        var vcm_table = $('#vcm_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: vcms,
+          columns: [
+            {title: "Date", data: "vcm_date", className: "dt-left"},
+            {title: "Start Time", data: "vcm_start_time", className: "dt-left"},
+            {title: "End Time", data: "vcm_end_time", className: "dt-left"},
+            {title: "Price to Refer", data: "vcm_price_to_refer", className: "dt-left"},
+            {title: "Lower Limit Price", data: "vcm_lower_limit_of_price", className: "dt-left"},
+            {title: "Upper Limit Price", data: "vcm_upper_limit_of_price", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="new_list_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var new_lists = {{ new_lists|safe }};
+      $(document).ready(function () {
+        var stock_data_table = $('#new_list_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: new_lists,
+          columns: [
+            {title: "Market Name", data: "market_name", className: "dt-left"},
+            {title: "Stock Code", data: "stock_code", className: "dt-left"},
+            {title: "Trade Date", data: "trade_date", className: "dt-left"},
+            {title: "Trade Sequence", data: "trade_sequence", className: "dt-left"},
+            {title: "Close Price", data: "close_price", className: "dt-left"},
+            {title: "Open Price", data: "open_price", className: "dt-left"},
+            {title: "Highest Price", data: "highest_price", className: "dt-left"},
+            {title: "Lowest Price", data: "lowest_price", className: "dt-left"},
+            {title: "Newest Price", data: "newest_price", className: "dt-left"},
+            {title: "Waipan", data: "waipan", className: "dt-left"},
+            {title: "Volume", data: "volume", className: "dt-left"},
+            {title: "Amount", data: "amount", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="list_fund_flow_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var list_fund_flows = {{ list_fund_flows|safe }};
+      $(document).ready(function () {
+        var stock_data_table = $('#list_fund_flow_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: list_fund_flows,
+          columns: [
+            {title: "Stock Code", data: "stock_code", className: "dt-left"},
+            {title: "Call Auction Amount", data: "call_auction_amount", className: "dt-left"},
+            {title: "Latest Price", data: "latest_price", className: "dt-left"},
+            {title: "Previous Close", data: "previous_close", className: "dt-left"}
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+
+    <div class="data_table">
+      <table id="list_buyin_rank_table" class="display" cellspacing="0" width="100%"></table>
+    </div>
+    <script type="text/javascript" charset='utf-8'>
+      var list_buyin_ranks = {{ list_buyin_ranks|safe }};
+      $(document).ready(function () {
+        var stock_data_table = $('#list_buyin_rank_table').DataTable({
+          "lengthMenu": [[10, 100, 500, -1], [10, 100, 500, "All"]],
+          data: list_buyin_ranks,
+          columns: [
+            {title: "Stock Code", data: "stock_code", className: "dt-left"},
+            {title: "Latest Price", data: "latest_price", className: "dt-left"},
+            {title: "Previous Close", data: "previous_close", className: "dt-left"},
+            {title: "Buyin Ratio", data: "buyin_ratio", className: "dt-left"},
+            {title: "Rank", data: "rank", className: "dt-left"},
+            {title: "Previous Rank", data: "previous_rank", className: "dt-left"},
+          ],
+          "order": [[1, 'des']]
+        });
+      });
+    </script>
+  </div>
+{% endblock %}

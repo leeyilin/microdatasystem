@@ -1,0 +1,58 @@
+<div class="form-group">
+  <label for="message_id">Message ID:&#160</label>
+  <select class="form-control" id="message_id" name="message_id" style="width: auto">
+    <option value="8100">8100(Stock Dict)</option>
+    <option value="8101">8101(Qt)</option>
+    <option value="8103">8103(RtMin)</option>
+    <option value="8104">8104(KLine)</option>
+    <option value="8105">8105(Mx)</option>
+    <option value="8106">8106(Blockqt)</option>
+    <option value="81061">81061(Block Overview)</option>
+    <option value="8110">8110(List)</option>
+    <option value="8112">8112(Base BQ)</option>
+    <option value="8113">8113(BQ Trace)</option>
+    <option value="8115">8115(Mx2)</option>
+    <option value="8117">8117(Qtex)</option>
+    <option value="8118">8118(CAS)</option>
+    <option value="8119">8119(VCM)</option>
+    <option value="8124">8124(HK Fund Flow List)</option>
+    <option value="8125">8125(HK Buyin Rank List)</option>
+  </select>
+</div>
+<div class="form-group">
+  <div class="input-group">
+    <div class="input-group-btn">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Market:&#160
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" id="my_unique_ul2">
+        <li>NASDAQ</li>
+        <li>HK</li>
+        <li>NYSE</li>
+        <li>AMEX</li>
+        <li class="divider"></li>
+        <li>QQZS</li>
+        <li>HKBLOCK</li>
+      </ul>
+    </div><!-- /btn-group -->
+    <input type="text" class="form-control" id="market_name" name="market_name" style="text-transform: uppercase">
+  </div><!-- /input-group -->
+</div>
+<div class="form-group">
+  <div class="input-group">
+    <div class="input-group-btn">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Stock:&#160
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" id="my_unique_ul3">
+        <li>00700</li>
+        <li>AAPL</li>
+        <li class="divider"></li>
+        <li>BABA</li>
+      </ul>
+    </div><!-- /btn-group -->
+    <input type="text" class="form-control" id="stock_id" name="stock_id"
+           placeholder="Optional.." style="text-transform: uppercase">
+  </div><!-- /input-group -->
+</div>
+<button type="submit" class="btn btn-danger">Request Data</button>

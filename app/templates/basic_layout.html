@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link rel="icon" href="{{ url_for('static', filename='phoenix.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap_dist/css/bootstrap.min.css') }}">
+  <!--<script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js" charset="utf-8"></script>
+  <script src="{{ url_for('static', filename='bootstrap_dist/js/bootstrap.min.js') }}"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"/>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+  <title>EastMoney Stock Data System</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='basic_layout_style.css') }}">
+  {% block selfstyle %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-md-12">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{{ url_for('basic_stock_data') }}">Data System</a>
+        </div>
+        <div>
+          <ul class="nav navbar-nav">
+            <li id="stock_data"><a href="{{ url_for('basic_stock_data') }}">Stock Data</a></li>
+            <li id="diff_stock_data"><a href="{{ url_for('diff_stock_data') }}">Diff Server Data</a></li>
+            <li id="dynamic_plot"><a href="#">Dynamic Plot</a></li>
+            <li class="dropdown" id="dropdown1">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Diff Qt List<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ url_for('diff_eoddata') }}">Eoddata</a></li>
+                <li><a href="{{ url_for('diff_sina_data') }}">Sina Website</a></li>
+                <li><a href="{{ url_for('diff_hkse_data') }}">Hong Kong Stock Exchange</a></li>
+                <li><a href="{{ url_for('diff_global_quote') }}">Global Quote</a></li>
+                <li class="divider"></li>
+                <li><a href="#">bbbb...</a></li>
+              </ul>
+            </li>
+            <li id="realtime_data"><a href="{{ url_for('mds_monitor') }}">MDS Monitor(Beta)</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-user"></span> My Profile</a></li>
+            <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+          </ul>
+        </div>
+      </div>{# End of column#}
+    </div>{# End of row#}
+  </div>{#End of container#}
+</nav>
+
+<script type="text/javascript">
+  $(".nav a").on("click", function () {
+    $(".nav").find(".active").removeClass("active");
+    $(this).parent().addClass("active");
+  });
+
+  function initNavbar() {
+    var listItems = $(".nav li");
+    listItems.each(function (index, li) {
+      if (li.id === "{{ selected_navbar_item|safe }}") {
+        $(this).addClass("active");
+      }
+    });
+  }
+  initNavbar();
+</script>
+<br><br>
+{% include 'flashed_messages.html' %}
+{% block content %}{% endblock %}
+<footer>
+  &copy; Copyright 2017 EastMoney Inc <strong> 外盘行情组 </strong>&#160;&#160;All Rights Reserved<br>
+  All Trademarks and register trademarks appearing on this site are
+  the property of their respective owners.
+</footer>
+</body>
+</html>

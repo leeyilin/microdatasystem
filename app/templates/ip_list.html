@@ -1,0 +1,21 @@
+<div class="form-group">
+  <div class="input-group">
+    <div class="input-group-btn">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">IP List
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" id="my_unique_ul1">
+        {% for addr in server_infos %}
+          <li>{{ addr.server_ip }}</li>
+        {% endfor %}
+      </ul>
+    </div><!-- /btn-group -->
+    <input type="text" class="form-control" id="ip_list" name="ip_list">
+  </div><!-- /input-group -->
+</div>
+<div class="form-group">
+  <div class="input-group">
+    <span class="input-group-addon">@Port</span>
+    <input type="text" class="form-control" name="port" id="port" value="1861" style="width: 100px">
+  </div>
+</div>
