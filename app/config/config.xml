@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<data>
+  <marketlist>
+    <market code="QQZS" id="100"></market>
+  </marketlist>
+  <serverlist>
+    <server ip="{IP}" port="1861" name="{name}" id="ip0"></server>
+  </serverlist>
+  <user_list>
+  </user_list>
+  <internalmarketlist>
+    <market code="US1" id="301"></market>
+  </internalmarketlist>
+</data>
