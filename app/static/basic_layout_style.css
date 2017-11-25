@@ -1,0 +1,42 @@
+.navbar-fixed-top {
+    background-color: #b1ffa8;
+    font-weight: bolder;
+}
+
+.navbar-fixed-top .dropdown-menu {
+    background-color: #c8ffff;
+    font-size: medium;
+    font-weight: bold;
+}
+
+h1 {
+  color: orangered;
+}
+
+h2 {
+  color: #3e8f3e;
+}
+
+body {
+    /*background-color: #9acfea;*/
+    font-size: medium;
+    font-family: sans-serif;
+    line-height: 1.6em;
+}
+
+form#query_data {
+    display: table;
+    padding: 10px;
+    border: thin dotted #7e7e7e;
+    background-color: #9acfea;
+}
+
+footer {
+    font-size: 100%;
+    text-align: center;
+}
+
+footer strong {
+    font-style: italic;
+    font-size: 110%;
+}

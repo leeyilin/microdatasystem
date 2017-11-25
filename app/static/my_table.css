@@ -1,0 +1,15 @@
+div.data_table table#stock_list_table tbody tr.update {
+  background-color: #ffea00;
+}
+
+.update {
+  background-color: #ffea00;
+}
+
+table.dataTable#stock_list_table tbody tr.warning {
+  background-color: #ff2011;
+}
+
+div.data_table table {
+  font-size: medium;
+}
