@@ -1,8 +1,10 @@
 ## Microdatasystem - A Data Comparison System
 
 ### Skill Used: 
-  Python wrapper of C++ library <a href="https://github.com/leeyilin/CompressLib">CompressLib</a>, 
-build a web server via framework flask, web crawling with Python, JavaScript of JQuery and DataTable and other plugins
+1. Python wrapper of C++ library <a href="https://github.com/leeyilin/CompressLib">CompressLib</a>;
+2. build a web server via framework flask;
+3. web crawling with Python;
+4. JavaScript, including JQuery, DataTable and other plugins.
 
 ## Details:
   Quote data provided by different vendors could differ at the same moment of the trade day. Worse still, 
